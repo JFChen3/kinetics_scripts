@@ -57,7 +57,7 @@ def general_linfit(X, Y, nparams):
     
     npoints = np.size(Y)
     Y = np.reshape(Y, npoints, 1)
-    
+        
     if np.size(np.shape(X)) == 1:
         X = np.reshape(X, (npoints, 1))
     elif not np.shape(X)[0] == npoints:
@@ -66,7 +66,7 @@ def general_linfit(X, Y, nparams):
     #Add a column of ones if number of parameters is greater than the number of columns in X
     if np.shape(X)[1] < nparams:
         X = np.hstack((np.ones((npoints, 1)), X))
-        
+
     #Check to make sure dimensions match
     if not np.shape(X)[1] == nparams:
         raise ValueError("Error! System is either over or under determined.")
@@ -74,7 +74,7 @@ def general_linfit(X, Y, nparams):
     print np.shape(X)
     
     M = np.dot(np.transpose(X), X)
-    b = np.dot(np.transpose(X), rates)
+    b = np.dot(np.transpose(X), Y)
     
     params = np.linalg.solve(M, b)
     
