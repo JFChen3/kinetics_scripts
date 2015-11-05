@@ -50,6 +50,36 @@ def fit_power_model(conc, rates):
     powers = params[1:]
     
     return params, k, powers
+    
+def general_linfit(X, Y, nparams):
+    # General linear fit function, will replace fit_power_model at some point
+    # Makes no assumptions about what input data is
+    
+    npoints = np.size(Y)
+    Y = np.reshape(Y, npoints, 1)
+    
+    if np.size(np.shape(X)) == 1:
+        X = np.reshape(X, (npoints, 1))
+    elif not np.shape(X)[0] == npoints:
+        conc = np.reshape(X, (npoints, np.shape(X)[0]))
+
+    #Add a column of ones if number of parameters is greater than the number of columns in X
+    if np.shape(X)[1] < nparams:
+        X = np.hstack((np.ones((npoints, 1)), X))
+        
+    #Check to make sure dimensions match
+    if not np.shape(X)[1] == nparams:
+        raise ValueError("Error! System is either over or under determined.")
+    
+    print np.shape(X)
+    
+    M = np.dot(np.transpose(X), X)
+    b = np.dot(np.transpose(X), rates)
+    
+    params = np.linalg.solve(M, b)
+    
+    return params
+
 
 def get_rates_fd(conc, step):
     # Use finite difference to approximate rates
